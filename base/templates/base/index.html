@@ -1,0 +1,19 @@
+<h1>ToDOList</h1>
+
+<ul>
+    {% for task in tasks %}
+    <li><a href="{% url 'task-content' task.id %}">{{ task.title }}</a>
+        {% if task.complete %}<p>Complete{% else %}<p> Not complete </p>{% endif %}</p></li>
+    <a href="{% url 'delete-task' task.id %}">Delete</a>
+    {% endfor %}
+</ul>
+
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" id="title" name="title" required>
+    <input type="text" id="content" name="content">
+    <input type="submit">
+</form>
+
+<a href="{% url 'logout' %}"><button>Logout</button></a>
