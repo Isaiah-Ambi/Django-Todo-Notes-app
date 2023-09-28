@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from .models import Task
@@ -19,6 +19,10 @@ def registration_view(request):
         form = RegistrationForm()
     return render(request, 'registration/registration.html', {'form': form})
 
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
 @login_required
 def profile(request):
     return render(request, 'base/profile.html')
@@ -27,6 +31,7 @@ def profile(request):
 @login_required
 def index(request):
     context = Task.objects.filter(user=request.user)
+    #context.order_by('complete')
     if request.method == 'POST':
         
         title = request.POST['title']
@@ -55,7 +60,7 @@ def task_update(request, pk):
         task.save()
 
         # Redirect back to the task content page or any other page you prefer
-        return redirect('task-content', pk=pk)
+        return redirect('index', pk=pk)
 
     return render(request, 'base/task_update.html', {'task': task})
 
